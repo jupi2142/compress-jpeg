@@ -1,6 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
+import os
+from uuid import uuid4
+
+import compress_jpeg
+
+
+def argument_directory():
+    directory_path = '/tmp/' + uuid4().hex
+    os.makedirs(directory_path)
+    assert compress_jpeg.compressor_factory(20)(directory_path) is None
+
+
+def argument_non_image():
+    non_image_path = '/tmp/' + uuid4().hex
+    file(non_image_path, 'w+').close()
+    assert compress_jpeg.compressor_factory(20)(non_image_path) is None
+
+
+def argument_non_existent():
+    non_existent_path = '/tmp/' + uuid4().hex
+    assert compress_jpeg.compressor_factory(20)(non_existent_path) is None
+
+argument_directory()
+argument_non_image()
+argument_non_existent()
 # "What if they send a non image file?" Jupi thought
 # Decisions, decisions. What shoudl Jupi do? Jupi remembers something about
 # reversible failure or some shit. Something about leaving everything not
