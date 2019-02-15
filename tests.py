@@ -37,6 +37,4 @@ argument_non_existent()
 
 # "What if the file doesn't exist?" - DONE
 
-# "I _know_ I'm gonna forget the tests sooner or later." Jupi is a veteran in
-# the field. He has been burned multiple times. He remembers how he fixed this
-# "memory" problem in the AhadooCollect project
+# "I _know_ I'm gonna forget the tests sooner or later." - DONE
