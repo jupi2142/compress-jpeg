@@ -26,9 +26,18 @@ def argument_non_existent():
     assert compress_jpeg.compressor_factory(20)(non_existent_path) is None
 
 
+def correct_output():
+    path = '1-001.jpg'
+    output = '/tmp/' + uuid4().hex
+    os.makedirs(output)
+    assert compress_jpeg.compressor_factory(20, output)(path) is not None
+    assert path in os.listdir(output)
+
+
 argument_directory()
 argument_non_image()
 argument_non_existent()
+correct_output()
 
 
 # "What if they send a non image file?" - DONE
@@ -38,3 +47,10 @@ argument_non_existent()
 # "What if the file doesn't exist?" - DONE
 
 # "I _know_ I'm gonna forget the tests sooner or later." - DONE
+
+# "What if I just want to override the picture? What then? :hmm: Would passing
+# '.' to work 'prefix' work?" Jupi thoughts. "Let's try this!"
+# "It worked! But that raises another question" Jupi added. "We need to change
+# how the output works. It should just be a directory/path"
+
+# "I think it's time to use this in a web app"
