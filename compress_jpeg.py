@@ -9,7 +9,12 @@ from PIL import Image
 
 def save_picture(origin, output_directory='Comp', quality=20, extension='jpg'):
     origin = os.path.abspath(origin)
-    output_directory = os.path.abspath(output_directory)
+
+    if output_directory is None:
+        output_directory = os.path.dirname(origin)
+    else:
+        output_directory = os.path.abspath(output_directory)
+
     try:
         os.makedirs(output_directory)
     except:
@@ -52,7 +57,11 @@ if __name__ == "__main__":
                         type=int,
                         help="quality",
                         default=20)
+    parser.add_argument("-i",
+                        "--inplace",
+                        help="generate laravel controller",
+                        action="store_true")
 
     args = parser.parse_args()
     for path in args.files:
-        save_picture(path, args.output, args.quality)
+        save_picture(path, None if args.inplace else args.output, args.quality)

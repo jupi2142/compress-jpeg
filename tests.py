@@ -4,10 +4,11 @@
 from __future__ import print_function
 
 import os
+import shutil
+from functools import wraps
 from uuid import uuid4
 
 import compress_jpeg
-from functools import wraps
 
 
 def announce(f):
@@ -42,17 +43,41 @@ def argument_non_existent():
 
 @announce
 def correct_output():
+    temp_folder = '/tmp/' + uuid4().hex
+    os.makedirs(temp_folder)
+
+    path = '1-001.jpg'
+    new_path = os.path.join(temp_folder, '1-001.jpg')
+    shutil.copy(path, new_path)
+
+    output = '/tmp/' + uuid4().hex
+    os.makedirs(output)
+
+    assert compress_jpeg.save_picture(new_path, output) is not None
+    assert path in os.listdir(output)
+
+
+@announce
+def inplace_replacement():
     path = '1-001.jpg'
     output = '/tmp/' + uuid4().hex
     os.makedirs(output)
-    assert compress_jpeg.save_picture(path, output) is not None
-    assert path in os.listdir(output)
+    shutil.copy(path, output)
+    new_path = os.path.join(output, path)
+
+    previous_size = os.stat(new_path).st_size
+
+    assert compress_jpeg.save_picture(new_path, None) is not None
+
+    new_size = os.stat(new_path).st_size
+    assert new_size < previous_size
 
 
 argument_directory()
 argument_non_image()
 argument_non_existent()
 correct_output()
+inplace_replacement()
 
 
 # "What if they send a non image file?" - DONE
