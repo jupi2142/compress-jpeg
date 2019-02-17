@@ -78,20 +78,3 @@ argument_non_image()
 argument_non_existent()
 correct_output()
 inplace_replacement()
-
-
-# "What if they send a non image file?" - DONE
-
-# "What if the file doesn't exist?" - DONE
-
-# "What if the file doesn't exist?" - DONE
-
-# "I _know_ I'm gonna forget the tests sooner or later." - DONE
-
-# "What if I just want to override the picture? What then? :hmm: Would passing
-# '.' to work 'prefix' work?" Jupi thoughts. "Let's try this!"
-
-# "We need to change how the output works. It should just be a directory/path" -
-# DONE
-
-# "I think it's time to use this in a web app"
