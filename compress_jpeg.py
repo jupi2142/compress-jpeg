@@ -7,33 +7,30 @@ import os
 from PIL import Image
 
 
-def compressor_factory(quality, output_directory='compressed'):
+def save_picture(origin, output_directory='Comp', quality=20, extension='jpg'):
+    origin = os.path.abspath(origin)
     output_directory = os.path.abspath(output_directory)
+    try:
+        os.makedirs(output_directory)
+    except:
+        pass
 
-    def inner(picture):
-        picture = os.path.abspath(picture)
-        filename = os.path.basename(picture)
-        root, extension = os.path.splitext(filename)
-        output_path = os.path.join(output_directory, '%s.jpg' % root)
+    filename = os.path.basename(origin)
+    root, _ = os.path.splitext(filename)
+    output_path = os.path.join(output_directory, '%s.%s' % (root, extension))
 
-        try:
-            os.makedirs(output_directory)
-        except:
-            pass
-
-        try:
-            Image.open(picture).save(
-                output_path,
-                optimize=True,
-                quality=quality
-            )
-            return output_path
-        except IOError as e:
-            if e.strerror:
-                print(picture, e.strerror)
-            else:
-                print(e)
-    return inner
+    try:
+        Image.open(origin).save(
+            output_path,
+            optimize=True,
+            quality=quality
+        )
+        return output_path
+    except IOError as e:
+        if e.strerror:
+            print(origin, e.strerror)
+        else:
+            print(e)
 
 
 if __name__ == "__main__":
@@ -57,4 +54,5 @@ if __name__ == "__main__":
                         default=20)
 
     args = parser.parse_args()
-    map(compressor_factory(args.quality, args.output), args.files)
+    for path in args.files:
+        save_picture(path, args.output, args.quality)

@@ -7,30 +7,45 @@ import os
 from uuid import uuid4
 
 import compress_jpeg
+from functools import wraps
 
 
+def announce(f):
+
+    @wraps(f)
+    def inner(*args, **kwargs):
+        print(f.__name__)
+        return f(*args, **kwargs)
+
+    return inner
+
+
+@announce
 def argument_directory():
     directory_path = '/tmp/' + uuid4().hex
     os.makedirs(directory_path)
-    assert compress_jpeg.compressor_factory(20)(directory_path) is None
+    assert compress_jpeg.save_picture(directory_path) is None
 
 
+@announce
 def argument_non_image():
     non_image_path = '/tmp/' + uuid4().hex
     file(non_image_path, 'w+').close()
-    assert compress_jpeg.compressor_factory(20)(non_image_path) is None
+    assert compress_jpeg.save_picture(non_image_path) is None
 
 
+@announce
 def argument_non_existent():
     non_existent_path = '/tmp/' + uuid4().hex
-    assert compress_jpeg.compressor_factory(20)(non_existent_path) is None
+    assert compress_jpeg.save_picture(non_existent_path) is None
 
 
+@announce
 def correct_output():
     path = '1-001.jpg'
     output = '/tmp/' + uuid4().hex
     os.makedirs(output)
-    assert compress_jpeg.compressor_factory(20, output)(path) is not None
+    assert compress_jpeg.save_picture(path, output) is not None
     assert path in os.listdir(output)
 
 
@@ -50,7 +65,8 @@ correct_output()
 
 # "What if I just want to override the picture? What then? :hmm: Would passing
 # '.' to work 'prefix' work?" Jupi thoughts. "Let's try this!"
-# "It worked! But that raises another question" Jupi added. "We need to change
-# how the output works. It should just be a directory/path"
+
+# "We need to change how the output works. It should just be a directory/path" -
+# DONE
 
 # "I think it's time to use this in a web app"
