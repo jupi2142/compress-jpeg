@@ -29,7 +29,7 @@ def entry_point():
     with open(original_file_path, 'wb') as f:
         f.write(datatowrite)
 
-    new_file_path = save_picture(original_file_path, quality=quality)
+    new_file_path = save_picture(original_file_path, '/tmp/Comp', quality)
     return send_file(new_file_path, mimetype='image/jpeg')
 
 
